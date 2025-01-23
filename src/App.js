@@ -81,7 +81,7 @@ function App() {
           options={options}
           components={{ Option: IconOption }}
           onChange={setSelectedTemplate}
-          placeholder="Select a meme template"
+          placeholder="Meme template"
         />
       </div>
 
@@ -92,6 +92,7 @@ function App() {
         onChange={(e) => setTopText(e.target.value)}
         placeholder="Enter top text"
       />
+
       <label htmlFor="bottomText">Bottom text</label>
       <input
         id="bottomText"
