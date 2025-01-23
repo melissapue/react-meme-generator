@@ -131,4 +131,5 @@ label {
   display: block;
   text-align: left;
   margin-top: 20px;
+  visibility: visible; /* Ensure it's visible */
 }
