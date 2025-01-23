@@ -72,17 +72,19 @@ function App() {
         <img src={memeUrl} alt="Generated Meme" data-test-id="meme-image" />
       </a>
 
-      <label htmlFor="meme-template" className="meme-template-label">
-        Meme Template
-      </label>
-      <div className="select">
-        <Select
-          id="meme-template"
-          options={options}
-          components={{ Option: IconOption }}
-          onChange={setSelectedTemplate}
-          placeholder="Meme template"
-        />
+      <div className="select-container">
+        <label htmlFor="meme-template" className="meme-template-label">
+          Meme Template
+        </label>
+        <div className="select">
+          <Select
+            id="meme-template"
+            options={options}
+            components={{ Option: IconOption }}
+            onChange={setSelectedTemplate}
+            placeholder="Meme template"
+          />
+        </div>
       </div>
 
       <label htmlFor="topText">Top text</label>

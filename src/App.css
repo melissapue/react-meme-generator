@@ -22,12 +22,25 @@ h1 {
   margin-bottom: 20px;
 }
 
-.select {
+.select-container {
   width: 80%;
   max-width: 400px;
   margin: 20px auto;
-  padding: 10px;
-  border-radius: 8px;
+  text-align: left;
+}
+
+.meme-template-label {
+  font-family: 'Lexend Giga', sans-serif;
+  font-size: 18px;
+  font-weight: bold;
+  color: #7f0f7f;
+  display: block;
+  margin-bottom: 10px;
+  visibility: visible;
+}
+
+.select {
+  width: 100%;
   background-color: #e58491;
 }
 
@@ -131,5 +144,5 @@ label {
   display: block;
   text-align: left;
   margin-top: 20px;
-  visibility: visible; /* Ensure it's visible */
+  visibility: visible;
 }
