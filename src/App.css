@@ -4,33 +4,35 @@ body {
   height: 100%;
   margin: 0;
   background-color: rgb(225, 97, 61); /* Your chosen background color */
+  font-family: 'Lexend Giga', sans-serif; /* Default font for the page */
 }
 
-/* General layout */
+/* General layout for the app container */
 .Location {
   text-align: center;
   padding: 20px;
-  background-size: cover;
-  min-height: 100vh; /* Ensure it fills the entire viewport height */
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
 }
 
 /* Heading style */
 h1 {
   color: rgb(240, 219, 206);
   font-family: 'Lexend Giga', sans-serif;
+  margin-bottom: 20px; /* Space below the heading */
 }
 
 /* Styling the react-select container */
 .select {
   width: 80%;
-  margin: 0 auto;
+  max-width: 400px; /* Limit the width of the dropdown */
+  margin: 20px auto; /* Center the dropdown */
   padding: 10px;
   border-radius: 8px;
   background-color: #fff;
-  margin-top: 20px; /* Space above the dropdown */
 }
 
 /* Styling the dropdown itself */
@@ -52,7 +54,6 @@ h1 {
 .react-select__single-value {
   color: #111;
   font-weight: bold;
-  font-family: 'Lexend Giga', sans-serif;
 }
 
 /* Hover effect for the options */
@@ -64,7 +65,6 @@ h1 {
 
 /* Customizing the option items */
 .react-select__option {
-  font-family: 'Lexend Giga', sans-serif;
   color: #333;
   padding: 8px;
   display: flex;
@@ -81,7 +81,7 @@ img {
   max-width: 100%;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  margin-top: 20px; /* Space between meme image and other elements */
+  margin-top: 20px; /* Space between the meme image and other elements */
 }
 
 /* Button styling */
@@ -95,11 +95,11 @@ button {
   font-size: 16px;
   margin-top: 10px;
   font-family: 'Inter', sans-serif;
+  transition: background-color 0.3s ease;
 }
 
 button:hover {
   background-color: #ffdeda;
-  color: #111;
 }
 
 button:focus {
@@ -110,4 +110,21 @@ button:active {
   background-color: #ffdeda;
   color: #111;
   border-color: #111;
+}
+
+/* Input styling */
+input[type='text'] {
+  padding: 10px;
+  margin: 10px 0;
+  width: 80%;
+  max-width: 400px; /* Limit the input width */
+  border: 2px solid #fee6e3;
+  border-radius: 8px;
+  font-family: 'Inter', sans-serif;
+}
+
+input[type='text']:focus {
+  outline: none;
+  border-color: #ffdeda;
+  background-color: #fff7f4;
 }

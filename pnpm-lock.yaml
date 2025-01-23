@@ -26,9 +26,6 @@ importers:
       sass:
         specifier: 1.83.4
         version: 1.83.4
-      webfontloader:
-        specifier: ^1.6.28
-        version: 1.6.28
     devDependencies:
       '@jest/globals':
         specifier: ^29.7.0
@@ -54,6 +51,9 @@ importers:
       '@types/testing-library__jest-dom':
         specifier: ^5.14.9
         version: 5.14.9
+      '@types/webfontloader':
+        specifier: ^1.6.38
+        version: 1.6.38
       eslint:
         specifier: ^8.57.1
         version: 8.57.1
@@ -1528,6 +1528,9 @@ packages:
 
   '@types/trusted-types@2.0.7':
     resolution: {integrity: sha512-ScaPdn1dQczgbl0QFTeTOmVHFULt394XJgOQNoyVhZ6r2vLnMLJfBPd53SB52T/3G36VI1/g2MZaX0cwDuXsfw==}
+
+  '@types/webfontloader@1.6.38':
+    resolution: {integrity: sha512-kUaF72Fv202suFx6yBrwXqeVRMx7hGtJTesyESZgn9sEPCUeDXm2p0SiyS1MTqW74nQP4p7JyrOCwZ7pNFns4w==}
 
   '@types/ws@8.5.13':
     resolution: {integrity: sha512-osM/gWBTPKgHV8XkTunnegTRIsvF6owmf5w+JtAfOw472dptdm0dlGv4xCt6GwQRcC2XVOvvRE/0bAoQcL2QkA==}
@@ -5793,9 +5796,6 @@ packages:
   wbuf@1.7.3:
     resolution: {integrity: sha512-O84QOnr0icsbFGLS0O3bI5FswxzRr8/gHwWkDlQFskhSPryQXvrTMxjxGP4+iWYoauLoBvfDpkrOauZ+0iZpDA==}
 
-  webfontloader@1.6.28:
-    resolution: {integrity: sha512-Egb0oFEga6f+nSgasH3E0M405Pzn6y3/9tOVanv/DLfa1YBIgcv90L18YyWnvXkRbIM17v5Kv6IT2N6g1x5tvQ==}
-
   webidl-conversions@4.0.2:
     resolution: {integrity: sha512-YQ+BmxuTgd6UXZW3+ICGfyqRyHXVlD5GtQr5+qjiNW7bF0cqrzX500HVXPBOvgXb5YnzDd+h0zqyv61KUD7+Sg==}
 
@@ -7853,6 +7853,8 @@ snapshots:
       '@types/jest': 29.5.14
 
   '@types/trusted-types@2.0.7': {}
+
+  '@types/webfontloader@1.6.38': {}
 
   '@types/ws@8.5.13':
     dependencies:
@@ -12862,8 +12864,6 @@ snapshots:
   wbuf@1.7.3:
     dependencies:
       minimalistic-assert: 1.0.1
-
-  webfontloader@1.6.28: {}
 
   webidl-conversions@4.0.2: {}
 
