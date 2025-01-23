@@ -72,7 +72,6 @@ function App() {
         <img src={memeUrl} alt="Generated Meme" data-test-id="meme-image" />
       </a>
 
-      {/* Meme Template Selector with Label */}
       <label htmlFor="meme-template" className="meme-template-label">
         Meme Template
       </label>
@@ -86,7 +85,6 @@ function App() {
         />
       </div>
 
-      {/* Top Text Input */}
       <label htmlFor="topText">Top text</label>
       <input
         id="topText"
@@ -94,8 +92,6 @@ function App() {
         onChange={(e) => setTopText(e.target.value)}
         placeholder="Enter top text"
       />
-
-      {/* Bottom Text Input */}
       <label htmlFor="bottomText">Bottom text</label>
       <input
         id="bottomText"
