@@ -1,38 +1,113 @@
-.App {
+/* Apply background to the entire page */
+html,
+body {
+  height: 100%;
+  margin: 0;
+  background-color: rgb(225, 97, 61); /* Your chosen background color */
+}
+
+/* General layout */
+.Location {
   text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+  padding: 20px;
+  background-size: cover;
+  min-height: 100vh; /* Ensure it fills the entire viewport height */
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.App-link {
-  color: #61dafb;
+/* Heading style */
+h1 {
+  color: rgb(240, 219, 206);
+  font-family: 'Lexend Giga', sans-serif;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Styling the react-select container */
+.select {
+  width: 80%;
+  margin: 0 auto;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #fff;
+  margin-top: 20px; /* Space above the dropdown */
+}
+
+/* Styling the dropdown itself */
+.react-select__control {
+  border: 2px solid #fee6e3; /* Light border color */
+  border-radius: 8px;
+  background-color: #fee6e3;
+  box-shadow: none;
+  padding: 10px;
+}
+
+/* Customizing the dropdown menu */
+.react-select__menu {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+}
+
+/* Styling the selected option */
+.react-select__single-value {
+  color: #111;
+  font-weight: bold;
+  font-family: 'Lexend Giga', sans-serif;
+}
+
+/* Hover effect for the options */
+.react-select__option:hover {
+  background-color: #ffdeda;
+  color: #111;
+  font-weight: bold;
+}
+
+/* Customizing the option items */
+.react-select__option {
+  font-family: 'Lexend Giga', sans-serif;
+  color: #333;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+}
+
+/* Image preview for the selected option */
+.react-select__option img {
+  margin-right: 10px;
+}
+
+/* Styling the meme image */
+img {
+  max-width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 20px; /* Space between meme image and other elements */
+}
+
+/* Button styling */
+button {
+  background-color: #fee6e3;
+  border: 2px solid #111;
+  border-radius: 8px;
+  color: #111;
+  cursor: pointer;
+  padding: 10px 20px;
+  font-size: 16px;
+  margin-top: 10px;
+  font-family: 'Inter', sans-serif;
+}
+
+button:hover {
+  background-color: #ffdeda;
+  color: #111;
+}
+
+button:focus {
+  outline: none;
+}
+
+button:active {
+  background-color: #ffdeda;
+  color: #111;
+  border-color: #111;
 }
