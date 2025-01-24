@@ -1,36 +1,23 @@
 import './App.css';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import Select, { components } from 'react-select';
-
-const IconOption = (props) => {
-  const { Option } = components;
-  return (
-    <Option {...props}>
-      <img
-        src={props.data.icon}
-        alt={props.data.label}
-        style={{ width: 36, marginRight: 10 }}
-      />
-      {props.data.label}
-    </Option>
-  );
-};
+import Select from 'react-select';
 
 function App() {
   const [templates, setTemplates] = useState([]);
-  const [selectedTemplate, setSelectedTemplate] = useState(null);
+  const [selectedTemplate, setSelectedTemplate] = useState('doge'); // Default template is 'doge'
   const [topText, setTopText] = useState('');
   const [bottomText, setBottomText] = useState('');
   const [memeUrl, setMemeUrl] = useState(
-    'https://api.memegen.link/images/doge.png',
+    'https://api.memegen.link/images/doge.png', // Default meme URL is doge
   );
 
   useEffect(() => {
+    // Fetch the templates when the component loads
     axios
       .get('https://api.memegen.link/templates')
       .then((response) => {
-        setTemplates(response.data);
+        setTemplates(response.data); // Save the template data to state
       })
       .catch((error) => {
         console.error('Error fetching meme templates:', error);
@@ -38,15 +25,18 @@ function App() {
   }, []);
 
   const handleGenerateClick = () => {
+    // Format the top and bottom text (replace spaces with underscores)
     const formattedTopText = topText.trim().replaceAll(' ', '_') || '_';
     const formattedBottomText = bottomText.trim().replaceAll(' ', '_') || '_';
 
-    const newMemeUrl = `${selectedTemplate.icon.slice(
-      0,
-      selectedTemplate.icon.indexOf('.', 32),
-    )}/${formattedTopText}/${formattedBottomText}.png`;
+    // If no template is selected, default to 'doge' meme template
+    const memeBaseUrl =
+      selectedTemplate === 'doge'
+        ? 'https://api.memegen.link/images/doge' // Use doge meme template
+        : `https://api.memegen.link/images/${selectedTemplate}`; // Use selected template if it's not doge
 
-    setMemeUrl(newMemeUrl);
+    const newMemeUrl = `${memeBaseUrl}/${formattedTopText}/${formattedBottomText}.png`;
+    setMemeUrl(newMemeUrl); // Set the generated meme URL
   };
 
   const handleDownloadClick = () => {
@@ -58,6 +48,7 @@ function App() {
     document.body.removeChild(link);
   };
 
+  // Create options for the select dropdown
   const options = templates.map((template) => ({
     value: template.id,
     label: template.name,
@@ -68,6 +59,7 @@ function App() {
     <div className="Location">
       <h1>Meme Generator</h1>
 
+      {/* Display the generated meme */}
       <a href={memeUrl} download>
         <img src={memeUrl} alt="Generated Meme" data-test-id="meme-image" />
       </a>
@@ -79,9 +71,9 @@ function App() {
         <Select
           id="meme-template"
           options={options}
-          components={{ Option: IconOption }}
-          onChange={setSelectedTemplate}
-          placeholder="Meme template"
+          onChange={setSelectedTemplate} // Set the selected template when changed
+          value={selectedTemplate} // Set the value of the select to the selected template
+          placeholder="Select a meme template"
         />
       </div>
 
@@ -89,7 +81,7 @@ function App() {
       <input
         id="topText"
         value={topText}
-        onChange={(e) => setTopText(e.target.value)}
+        onChange={(e) => setTopText(e.target.value)} // Update topText state on input change
         placeholder="Enter top text"
       />
 
@@ -97,17 +89,19 @@ function App() {
       <input
         id="bottomText"
         value={bottomText}
-        onChange={(e) => setBottomText(e.target.value)}
+        onChange={(e) => setBottomText(e.target.value)} // Update bottomText state on input change
         placeholder="Enter bottom text"
       />
 
+      {/* Button to generate the meme */}
       <button
         onClick={handleGenerateClick}
-        disabled={!selectedTemplate}
-        data-test-id="generate-meme"
+        disabled={!selectedTemplate} // Disable if no template is selected
       >
         Generate Meme
       </button>
+
+      {/* Button to download the meme */}
       <button onClick={handleDownloadClick}>Download Meme</button>
     </div>
   );
