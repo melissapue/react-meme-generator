@@ -1,6 +1,6 @@
 import './App.css';
 import axios from 'axios';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
 
 function App() {
@@ -25,7 +25,7 @@ function App() {
   }, []);
 
   // Helper function to generate meme URL based on input text and selected template
-  const generateMemeUrl = useCallback(() => {
+  const generateMemeUrl = () => {
     // Format top and bottom text (replace spaces with underscores)
     const formattedTopText = topText.trim().replaceAll(' ', '_') || '_';
     const formattedBottomText = bottomText.trim().replaceAll(' ', '_') || '_';
@@ -39,24 +39,17 @@ function App() {
     // Generate the meme URL
     const newMemeUrl = `${memeBaseUrl}/${formattedTopText}/${formattedBottomText}.png`;
     setMemeUrl(newMemeUrl); // Update meme URL in state
-  }, [topText, bottomText, selectedTemplate]);
+  };
 
   // Generate meme URL whenever topText, bottomText, or selectedTemplate changes
   useEffect(() => {
     generateMemeUrl();
-  }, [topText, bottomText, selectedTemplate, generateMemeUrl]);
+  }, [topText, bottomText, selectedTemplate]);
 
   // Handle template selection change
   const handleTemplateChange = (selectedOption) => {
-    setSelectedTemplate(selectedOption.value); // Update selected template state
-  };
-
-  // Handle template input change (when typing 'doge')
-  const handleTemplateInputChange = (event) => {
-    const inputValue = event.target.value.trim();
-    if (inputValue && inputValue !== selectedTemplate) {
-      setSelectedTemplate(inputValue);
-    }
+    const newTemplate = selectedOption.value;
+    setSelectedTemplate(newTemplate); // Update selected template
   };
 
   // Handle meme download
@@ -97,16 +90,6 @@ function App() {
           placeholder="Select a meme template"
         />
       </div>
-
-      <label htmlFor="templateInput">
-        Or Type Template Name (e.g., "doge")
-      </label>
-      <input
-        id="templateInput"
-        value={selectedTemplate}
-        onChange={handleTemplateInputChange} // Handle manual template input change
-        placeholder="Type meme template"
-      />
 
       <label htmlFor="topText">Top text</label>
       <input
