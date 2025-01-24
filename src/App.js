@@ -51,6 +51,14 @@ function App() {
     setSelectedTemplate(selectedOption.value); // Update selected template state
   };
 
+  // Handle template input change (when typing 'doge')
+  const handleTemplateInputChange = (event) => {
+    const inputValue = event.target.value.trim();
+    if (inputValue && inputValue !== selectedTemplate) {
+      setSelectedTemplate(inputValue);
+    }
+  };
+
   // Handle meme download
   const handleDownloadClick = () => {
     const link = document.createElement('a');
@@ -89,6 +97,16 @@ function App() {
           placeholder="Select a meme template"
         />
       </div>
+
+      <label htmlFor="templateInput">
+        Or Type Template Name (e.g., "doge")
+      </label>
+      <input
+        id="templateInput"
+        value={selectedTemplate}
+        onChange={handleTemplateInputChange} // Handle manual template input change
+        placeholder="Type meme template"
+      />
 
       <label htmlFor="topText">Top text</label>
       <input
