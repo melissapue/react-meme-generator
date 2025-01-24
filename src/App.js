@@ -20,7 +20,7 @@ const IconOption = (props) => {
 
 function App() {
   const [templates, setTemplates] = useState([]);
-  const [selectedTemplate, setSelectedTemplate] = useState('doge'); // Default to 'doge'
+  const [selectedTemplate, setSelectedTemplate] = useState('doge'); // Default template is doge
   const [topText, setTopText] = useState('');
   const [bottomText, setBottomText] = useState('');
   const [memeUrl, setMemeUrl] = useState(
@@ -39,13 +39,25 @@ function App() {
       });
   }, []);
 
+  const handleTemplateChange = (selectedOption) => {
+    const newTemplate = selectedOption?.value || 'doge'; // Default to 'doge' if no template selected
+    setSelectedTemplate(newTemplate);
+
+    // Update meme URL based on the selected template
+    if (newTemplate === 'doge') {
+      setMemeUrl('https://api.memegen.link/images/doge.png');
+    } else {
+      setMemeUrl(''); // Clear meme URL if another template is selected
+    }
+  };
+
   const handleGenerateClick = () => {
     // Format top and bottom text for the API
     const formattedTopText = topText.trim().replaceAll(' ', '_') || '_';
     const formattedBottomText = bottomText.trim().replaceAll(' ', '_') || '_';
 
     // Generate the meme URL based on the selected template and text
-    const newMemeUrl = `https://api.memegen.link/images/${selectedTemplate}/${formattedTopText}/${formattedBottomText}.png`;
+    const newMemeUrl = `https://api.memegen.link/images/${selectedTemplate || 'doge'}/${formattedTopText}/${formattedBottomText}.png`;
     setMemeUrl(newMemeUrl);
   };
 
@@ -59,11 +71,14 @@ function App() {
   };
 
   // Map templates to options for the dropdown
-  const options = templates.map((template) => ({
-    value: template.id,
-    label: template.name,
-    icon: template.blank, // Use 'blank' URL as the preview image
-  }));
+  const options = [
+    { value: 'doge', label: 'Choose Template' }, // Placeholder option
+    ...templates.map((template) => ({
+      value: template.id,
+      label: template.name,
+      icon: template.blank, // Use 'blank' URL as the preview image
+    })),
+  ];
 
   return (
     <div className="Location">
@@ -82,9 +97,14 @@ function App() {
           id="meme-template"
           options={options}
           components={{ Option: IconOption }} // Use custom component for options
-          onChange={(e) => setSelectedTemplate(e.value)} // Update template selection
-          placeholder="Choose a meme template"
-          defaultValue={options.find((option) => option.value === 'doge')} // Default to 'doge'
+          onChange={handleTemplateChange} // Update template selection
+          value={
+            options.find((option) => option.value === selectedTemplate) || {
+              value: 'doge',
+              label: 'Choose Template',
+            }
+          } // Show selected template or default text
+          placeholder="Choose Template"
         />
       </div>
 
