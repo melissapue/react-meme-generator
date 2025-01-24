@@ -43,21 +43,31 @@ function App() {
     const newTemplate = selectedOption?.value || 'doge'; // Default to 'doge' if no template selected
     setSelectedTemplate(newTemplate);
 
-    // Update meme URL based on the selected template
-    if (newTemplate === 'doge') {
-      setMemeUrl('https://api.memegen.link/images/doge.png');
-    } else {
-      setMemeUrl(''); // Clear meme URL if another template is selected
-    }
-  };
-
-  const handleGenerateClick = () => {
-    // Format top and bottom text for the API
+    // Regenerate the meme URL with the updated template
     const formattedTopText = topText.trim().replaceAll(' ', '_') || '_';
     const formattedBottomText = bottomText.trim().replaceAll(' ', '_') || '_';
+    const newMemeUrl = `https://api.memegen.link/images/${newTemplate}/${formattedTopText}/${formattedBottomText}.png`;
+    setMemeUrl(newMemeUrl);
+  };
 
-    // Generate the meme URL based on the selected template and text
-    const newMemeUrl = `https://api.memegen.link/images/${selectedTemplate || 'doge'}/${formattedTopText}/${formattedBottomText}.png`;
+  const handleTextChange = (e, textType) => {
+    // Update either topText or bottomText based on the input
+    if (textType === 'top') {
+      setTopText(e.target.value);
+    } else if (textType === 'bottom') {
+      setBottomText(e.target.value);
+    }
+
+    // Regenerate the meme URL whenever text changes
+    const formattedTopText =
+      textType === 'top'
+        ? e.target.value.trim().replaceAll(' ', '_') || '_'
+        : topText.trim().replaceAll(' ', '_') || '_';
+    const formattedBottomText =
+      textType === 'bottom'
+        ? e.target.value.trim().replaceAll(' ', '_') || '_'
+        : bottomText.trim().replaceAll(' ', '_') || '_';
+    const newMemeUrl = `https://api.memegen.link/images/${selectedTemplate}/${formattedTopText}/${formattedBottomText}.png`;
     setMemeUrl(newMemeUrl);
   };
 
@@ -112,7 +122,7 @@ function App() {
       <input
         id="topText"
         value={topText}
-        onChange={(e) => setTopText(e.target.value)} // Update top text state
+        onChange={(e) => handleTextChange(e, 'top')} // Update top text state and URL
         placeholder="Enter top text"
       />
 
@@ -120,17 +130,9 @@ function App() {
       <input
         id="bottomText"
         value={bottomText}
-        onChange={(e) => setBottomText(e.target.value)} // Update bottom text state
+        onChange={(e) => handleTextChange(e, 'bottom')} // Update bottom text state and URL
         placeholder="Enter bottom text"
       />
-
-      {/* Button to generate the meme */}
-      <button
-        onClick={handleGenerateClick}
-        disabled={!selectedTemplate} // Disable if no template is selected
-      >
-        Generate Meme
-      </button>
 
       {/* Button to download the meme */}
       <button onClick={handleDownloadClick}>Download Meme</button>
