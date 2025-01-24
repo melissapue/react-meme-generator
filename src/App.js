@@ -1,6 +1,6 @@
 import './App.css';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Select from 'react-select';
 
 function App() {
@@ -12,33 +12,46 @@ function App() {
     'https://api.memegen.link/images/doge.png', // Default meme URL is doge
   );
 
+  // Fetch meme templates when component loads
   useEffect(() => {
-    // Fetch the templates when the component loads
     axios
       .get('https://api.memegen.link/templates')
       .then((response) => {
-        setTemplates(response.data); // Save the template data to state
+        setTemplates(response.data); // Set template list
       })
       .catch((error) => {
         console.error('Error fetching meme templates:', error);
       });
   }, []);
 
-  const handleGenerateClick = () => {
-    // Format the top and bottom text (replace spaces with underscores)
+  // Helper function to generate meme URL based on input text and selected template
+  const generateMemeUrl = useCallback(() => {
+    // Format top and bottom text (replace spaces with underscores)
     const formattedTopText = topText.trim().replaceAll(' ', '_') || '_';
     const formattedBottomText = bottomText.trim().replaceAll(' ', '_') || '_';
 
-    // If no template is selected, default to 'doge' meme template
+    // Determine the meme base URL based on selected template
     const memeBaseUrl =
       selectedTemplate === 'doge'
-        ? 'https://api.memegen.link/images/doge' // Use doge meme template
-        : `https://api.memegen.link/images/${selectedTemplate}`; // Use selected template if it's not doge
+        ? 'https://api.memegen.link/images/doge'
+        : `https://api.memegen.link/images/${selectedTemplate}`;
 
+    // Generate the meme URL
     const newMemeUrl = `${memeBaseUrl}/${formattedTopText}/${formattedBottomText}.png`;
-    setMemeUrl(newMemeUrl); // Set the generated meme URL
+    setMemeUrl(newMemeUrl); // Update meme URL in state
+  }, [topText, bottomText, selectedTemplate]);
+
+  // Generate meme URL whenever topText, bottomText, or selectedTemplate changes
+  useEffect(() => {
+    generateMemeUrl();
+  }, [topText, bottomText, selectedTemplate, generateMemeUrl]);
+
+  // Handle template selection change
+  const handleTemplateChange = (selectedOption) => {
+    setSelectedTemplate(selectedOption.value); // Update selected template state
   };
 
+  // Handle meme download
   const handleDownloadClick = () => {
     const link = document.createElement('a');
     link.href = memeUrl;
@@ -48,7 +61,7 @@ function App() {
     document.body.removeChild(link);
   };
 
-  // Create options for the select dropdown
+  // Create options for template selection dropdown
   const options = templates.map((template) => ({
     value: template.id,
     label: template.name,
@@ -71,8 +84,8 @@ function App() {
         <Select
           id="meme-template"
           options={options}
-          onChange={setSelectedTemplate} // Set the selected template when changed
-          value={selectedTemplate} // Set the value of the select to the selected template
+          onChange={handleTemplateChange} // Handle template selection change
+          value={options.find((option) => option.value === selectedTemplate)} // Set selected template
           placeholder="Select a meme template"
         />
       </div>
@@ -94,10 +107,7 @@ function App() {
       />
 
       {/* Button to generate the meme */}
-      <button
-        onClick={handleGenerateClick}
-        disabled={!selectedTemplate} // Disable if no template is selected
-      >
+      <button onClick={generateMemeUrl} disabled={!selectedTemplate}>
         Generate Meme
       </button>
 
