@@ -115,6 +115,7 @@ function App() {
               : options.find((option) => option.value === selectedTemplate)
           } // Show "Choose Template" initially
           placeholder="Choose Template"
+          isSearchable // Make the dropdown searchable
         />
       </div>
 

@@ -36,11 +36,11 @@ h1 {
   color: #7f0f7f;
   display: block;
   margin-bottom: 10px;
-  visibility: visible;
 }
 
 .select {
   width: 100%;
+  max-width: 400px;
   background-color: #e58491;
 }
 
@@ -49,12 +49,13 @@ h1 {
   border-radius: 8px;
   background-color: #fee6e3;
   box-shadow: none;
-  padding: 10px;
+  padding: 10px 12px;
 }
 
 .react-select__menu {
   background-color: #f9f9f9;
   border-radius: 8px;
+  z-index: 1000; /* Ensure dropdown is on top */
 }
 
 .react-select__single-value {
@@ -144,5 +145,4 @@ label {
   display: block;
   text-align: left;
   margin-top: 20px;
-  visibility: visible;
 }
