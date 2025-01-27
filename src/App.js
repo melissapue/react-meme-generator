@@ -48,7 +48,7 @@ function App() {
   };
 
   const handleTemplateChange = (selectedOption) => {
-    const newTemplate = selectedOption?.value || 'doge';
+    const newTemplate = selectedOption?.value || 'doge'; // default to 'doge'
     setSelectedTemplate(newTemplate);
     regenerateMemeUrl(newTemplate);
   };
@@ -115,7 +115,7 @@ function App() {
               : options.find((option) => option.value === selectedTemplate)
           } // Show "Choose Template" initially
           placeholder="Choose Template"
-          isSearchable // Make the dropdown searchable
+          isSearchable // Allow searching and typing in the dropdown
         />
       </div>
 
