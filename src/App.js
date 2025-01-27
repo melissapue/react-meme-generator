@@ -20,15 +20,13 @@ const IconOption = (props) => {
 
 function App() {
   const [templates, setTemplates] = useState([]);
-  const [selectedTemplate, setSelectedTemplate] = useState(''); // Start with no template selected
-  const [topText, setTopText] = useState(''); // Default top text
-  const [bottomText, setBottomText] = useState(''); // Default bottom text
-  const [memeUrl, setMemeUrl] = useState(
-    'https://api.memegen.link/images/noidea/highly_professional/meme_generator.jpg?watermark=MemeComplete.com&token=2ibib1bhzz941qk33lpj',
-  ); // Default meme URL set to your image
+  const [selectedTemplate, setSelectedTemplate] = useState('doge'); // Default template is 'doge'
+  const [topText, setTopText] = useState(''); // Default to empty
+  const [bottomText, setBottomText] = useState(''); // Default to empty
+  const [memeUrl, setMemeUrl] = useState(''); // Default meme URL is empty
 
+  // Fetch templates on component load
   useEffect(() => {
-    // Fetch templates on component load
     axios
       .get('https://api.memegen.link/templates')
       .then((response) => {
@@ -39,9 +37,9 @@ function App() {
       });
   }, []);
 
+  // Regenerate meme URL when top/bottom text or template changes
   const regenerateMemeUrl = useCallback(
     (template, top = topText, bottom = bottomText) => {
-      // Ensure top and bottom text are encoded correctly for URL use
       const formattedTopText = encodeURIComponent(top.trim()) || '_';
       const formattedBottomText = encodeURIComponent(bottom.trim()) || '_';
 
@@ -65,6 +63,11 @@ function App() {
     },
     [topText, bottomText], // Dependencies for regeneration
   );
+
+  // Automatically update meme when top/bottom text or template changes
+  useEffect(() => {
+    regenerateMemeUrl(selectedTemplate, topText, bottomText);
+  }, [selectedTemplate, topText, bottomText, regenerateMemeUrl]);
 
   const handleTemplateChange = (selectedOption) => {
     const newTemplate = selectedOption?.value || ''; // If no option, set to empty
@@ -105,15 +108,6 @@ function App() {
       icon: template.blank,
     })),
   ];
-
-  // Automatically update meme when top/bottom text or template changes
-  useEffect(() => {
-    if (!selectedTemplate && (topText || bottomText)) {
-      regenerateMemeUrl('', topText, bottomText); // Use default meme when no template is selected
-    } else if (selectedTemplate) {
-      regenerateMemeUrl(selectedTemplate, topText, bottomText); // Use selected template when available
-    }
-  }, [selectedTemplate, topText, bottomText, regenerateMemeUrl]);
 
   return (
     <div className="Location">
