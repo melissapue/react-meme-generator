@@ -87,13 +87,25 @@ function App() {
     }
   };
 
-  const handleDownloadClick = () => {
-    const link = document.createElement('a');
-    link.href = memeUrl;
-    link.download = 'meme_image.png';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  // Updated handleDownloadClick function to trigger the download using fetch
+  const handleDownloadClick = async () => {
+    if (!memeUrl) return; // Ensure memeUrl is available before attempting download
+
+    try {
+      // Fetch the image from the meme URL
+      const response = await fetch(memeUrl);
+      const blob = await response.blob(); // Convert the response to a Blob
+
+      // Create a temporary link to trigger the download
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob); // Create a URL for the Blob
+      link.download = 'meme_image.png'; // Set the download filename
+      document.body.appendChild(link);
+      link.click(); // Trigger the download
+      document.body.removeChild(link); // Remove the link after triggering the download
+    } catch (error) {
+      console.error('Error downloading the meme:', error);
+    }
   };
 
   // Handle image load
