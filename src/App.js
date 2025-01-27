@@ -21,10 +21,10 @@ const IconOption = (props) => {
 function App() {
   const [templates, setTemplates] = useState([]);
   const [selectedTemplate, setSelectedTemplate] = useState('doge'); // Default to 'doge'
-  const [topText, setTopText] = useState('Such meme'); // Default top text
-  const [bottomText, setBottomText] = useState('Much wow'); // Default bottom text
+  const [topText, setTopText] = useState(''); // Removed default top text
+  const [bottomText, setBottomText] = useState(''); // Removed default bottom text
   const [memeUrl, setMemeUrl] = useState(
-    'https://api.memegen.link/images/doge/such_meme/much_wow.png', // Default meme URL (doge)
+    'https://api.memegen.link/images/doge.png', // Default meme URL (doge)
   );
 
   useEffect(() => {
@@ -50,15 +50,7 @@ function App() {
   const handleTemplateChange = (selectedOption) => {
     const newTemplate = selectedOption?.value || 'doge'; // default to 'doge'
     setSelectedTemplate(newTemplate);
-
-    // If Doge is selected, reset meme URL and clear text
-    if (newTemplate === 'doge') {
-      setTopText('');
-      setBottomText('');
-      setMemeUrl('https://api.memegen.link/images/doge/.png');
-    } else {
-      regenerateMemeUrl(newTemplate);
-    }
+    regenerateMemeUrl(newTemplate);
   };
 
   const handleTextChange = (e, textType) => {
@@ -85,7 +77,7 @@ function App() {
   const options = [
     {
       value: 'doge',
-      label: 'Dogecoin Meme',
+      label: 'Doge Meme',
       icon: 'https://api.memegen.link/images/doge.png',
     },
     ...templates.map((template) => ({
@@ -116,12 +108,12 @@ function App() {
           value={
             selectedTemplate === 'doge'
               ? {
-                  label: 'Dogecoin Meme',
+                  label: 'Doge Meme',
                   value: 'doge',
                   icon: 'https://api.memegen.link/images/doge.png',
                 }
               : options.find((option) => option.value === selectedTemplate)
-          } // Show "Dogecoin Meme" initially
+          } // Show "Doge Meme" initially
           placeholder="Choose Template"
           isSearchable // Allow searching and typing in the dropdown
         />
