@@ -20,12 +20,10 @@ const IconOption = (props) => {
 
 function App() {
   const [templates, setTemplates] = useState([]);
-  const [selectedTemplate, setSelectedTemplate] = useState('doge'); // Default to 'doge'
+  const [selectedTemplate, setSelectedTemplate] = useState(''); // Start with no template
   const [topText, setTopText] = useState('');
   const [bottomText, setBottomText] = useState('');
-  const [memeUrl, setMemeUrl] = useState(
-    'https://api.memegen.link/images/doge.png', // Default meme URL
-  );
+  const [memeUrl, setMemeUrl] = useState(''); // No meme URL initially
 
   useEffect(() => {
     // Fetch templates on component load
@@ -41,16 +39,20 @@ function App() {
 
   const regenerateMemeUrl = (template, top = topText, bottom = bottomText) => {
     // Helper function to regenerate the meme URL
-    const formattedTopText = top.trim().replaceAll(' ', '_') || '_';
-    const formattedBottomText = bottom.trim().replaceAll(' ', '_') || '_';
+    const formattedTopText = top.trim().replaceAll(' ', '_') || '_'; // Empty text as "_"
+    const formattedBottomText = bottom.trim().replaceAll(' ', '_') || '_'; // Empty text as "_"
     const newMemeUrl = `https://api.memegen.link/images/${template}/${formattedTopText}/${formattedBottomText}.png`;
     setMemeUrl(newMemeUrl);
   };
 
   const handleTemplateChange = (selectedOption) => {
-    const newTemplate = selectedOption?.value || 'doge'; // default to 'doge'
+    const newTemplate = selectedOption?.value || ''; // Reset to empty string if no template
     setSelectedTemplate(newTemplate);
-    regenerateMemeUrl(newTemplate);
+    if (newTemplate) {
+      regenerateMemeUrl(newTemplate, topText, bottomText); // Regenerate meme URL if template is selected
+    } else {
+      setMemeUrl(''); // Clear meme image if no template selected
+    }
   };
 
   const handleTextChange = (e, textType) => {
@@ -65,21 +67,18 @@ function App() {
   };
 
   const handleDownloadClick = () => {
-    const link = document.createElement('a');
-    link.href = memeUrl;
-    link.download = 'meme_image.png';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    if (memeUrl) {
+      const link = document.createElement('a');
+      link.href = memeUrl;
+      link.download = 'meme_image.png';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
   };
 
   // Map templates to options for the dropdown
   const options = [
-    {
-      value: 'doge',
-      label: 'Choose Template',
-      icon: 'https://api.memegen.link/images/doge.png',
-    },
     ...templates.map((template) => ({
       value: template.id.toLowerCase(), // Convert to lowercase for uniformity
       label: template.name,
@@ -91,10 +90,12 @@ function App() {
     <div className="Location">
       <h1>Meme Generator</h1>
 
-      {/* Display the generated meme */}
-      <a href={memeUrl} download>
-        <img src={memeUrl} alt="Generated Meme" data-test-id="meme-image" />
-      </a>
+      {/* Display the generated meme if memeUrl exists */}
+      {memeUrl && (
+        <a href={memeUrl} download>
+          <img src={memeUrl} alt="Generated Meme" data-test-id="meme-image" />
+        </a>
+      )}
 
       <label htmlFor="meme-template" className="meme-template-label">
         Meme template
@@ -106,17 +107,12 @@ function App() {
           components={{ Option: IconOption }} // Use custom component for options
           onChange={handleTemplateChange} // Update template selection
           value={
-            selectedTemplate === 'doge'
-              ? {
-                  label: 'Choose Template',
-                  value: 'doge',
-                  icon: 'https://api.memegen.link/images/doge.png',
-                }
-              : options.find((option) => option.value === selectedTemplate)
-          } // Show "Choose Template" initially
+            selectedTemplate
+              ? options.find((option) => option.value === selectedTemplate)
+              : null
+          } // No selected template initially
           placeholder="Choose Template"
           isSearchable // Allow searching and typing in the dropdown
-          getOptionLabel={(e) => e.label.toLowerCase()} // Normalize the label to lowercase
         />
       </div>
 
