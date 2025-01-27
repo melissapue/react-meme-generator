@@ -24,6 +24,7 @@ function App() {
   const [topText, setTopText] = useState(''); // Default to empty
   const [bottomText, setBottomText] = useState(''); // Default to empty
   const [memeUrl, setMemeUrl] = useState(''); // Default meme URL is empty
+  const [isImageLoaded, setIsImageLoaded] = useState(false); // Track image load state
 
   // Fetch templates on component load
   useEffect(() => {
@@ -95,6 +96,11 @@ function App() {
     document.body.removeChild(link);
   };
 
+  // Handle image load
+  const handleImageLoad = () => {
+    setIsImageLoaded(true); // Mark image as loaded
+  };
+
   // Map templates to options for the dropdown
   const options = [
     {
@@ -115,7 +121,12 @@ function App() {
 
       {/* Display the generated meme */}
       <a href={memeUrl} download>
-        <img src={memeUrl} alt="Generated Meme" data-test-id="meme-image" />
+        <img
+          src={memeUrl}
+          alt="Generated Meme"
+          data-test-id="meme-image"
+          onLoad={handleImageLoad} // Trigger image load handler
+        />
       </a>
 
       <label htmlFor="meme-template" className="meme-template-label">
@@ -149,7 +160,10 @@ function App() {
         placeholder="Enter bottom text"
       />
 
-      <button onClick={handleDownloadClick}>Download Meme</button>
+      {/* Only render the button when the image has loaded */}
+      {isImageLoaded && (
+        <button onClick={handleDownloadClick}>Download Meme</button>
+      )}
     </div>
   );
 }
