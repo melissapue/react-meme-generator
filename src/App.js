@@ -81,7 +81,7 @@ function App() {
       icon: 'https://api.memegen.link/images/doge.png',
     },
     ...templates.map((template) => ({
-      value: template.id,
+      value: template.id.toLowerCase(), // Convert to lowercase for uniformity
       label: template.name,
       icon: template.blank, // Use 'blank' URL as the preview image
     })),
@@ -116,6 +116,7 @@ function App() {
           } // Show "Choose Template" initially
           placeholder="Choose Template"
           isSearchable // Allow searching and typing in the dropdown
+          getOptionLabel={(e) => e.label.toLowerCase()} // Normalize the label to lowercase
         />
       </div>
 
