@@ -20,12 +20,14 @@ const IconOption = (props) => {
 
 function App() {
   const [templates, setTemplates] = useState([]);
-  const [selectedTemplate, setSelectedTemplate] = useState('doge'); // Default to 'doge'
-  const [topText, setTopText] = useState(''); // Removed default top text
-  const [bottomText, setBottomText] = useState(''); // Removed default bottom text
+  const [selectedTemplate, setSelectedTemplate] = useState(
+    'https://api.memegen.link/images/noidea/highly_professional/meme_generator.jpg?watermark=MemeComplete.com&token=2ibib1bhzz941qk33lpj',
+  ); // Default to your custom template link
+  const [topText, setTopText] = useState(''); // Default top text
+  const [bottomText, setBottomText] = useState(''); // Default bottom text
   const [memeUrl, setMemeUrl] = useState(
-    'https://api.memegen.link/images/doge.png', // Default meme URL (doge)
-  );
+    'https://api.memegen.link/images/noidea/highly_professional/meme_generator.jpg?watermark=MemeComplete.com&token=2ibib1bhzz941qk33lpj',
+  ); // Default meme URL set to your image
 
   useEffect(() => {
     // Fetch templates on component load
@@ -41,26 +43,32 @@ function App() {
 
   const regenerateMemeUrl = (template, top = topText, bottom = bottomText) => {
     // Helper function to regenerate the meme URL
-    const formattedTopText = top.trim().replaceAll(' ', '_') || '_';
-    const formattedBottomText = bottom.trim().replaceAll(' ', '_') || '_';
-    const newMemeUrl = `https://api.memegen.link/images/${template}/${formattedTopText}/${formattedBottomText}.png`;
+    const formattedTopText = encodeURIComponent(top.trim()) || '_';
+    const formattedBottomText = encodeURIComponent(bottom.trim()) || '_';
+
+    // Check if the selected template is a URL (custom link)
+    const isCustomTemplate = template.startsWith('http');
+    const newMemeUrl = isCustomTemplate
+      ? template // For custom templates, use the provided URL
+      : `https://api.memegen.link/images/${template}/${formattedTopText}/${formattedBottomText}.png`;
+
     setMemeUrl(newMemeUrl);
   };
 
   const handleTemplateChange = (selectedOption) => {
-    const newTemplate = selectedOption?.value || 'doge'; // default to 'doge'
+    const newTemplate = selectedOption?.value || selectedTemplate; // Use the selected template
     setSelectedTemplate(newTemplate);
-    regenerateMemeUrl(newTemplate);
+    regenerateMemeUrl(newTemplate); // Regenerate meme URL on template change
   };
 
   const handleTextChange = (e, textType) => {
-    // Update either topText or bottomText based on the input
+    const value = e.target.value;
     if (textType === 'top') {
-      setTopText(e.target.value);
-      regenerateMemeUrl(selectedTemplate, e.target.value, bottomText);
+      setTopText(value);
+      regenerateMemeUrl(selectedTemplate, value, bottomText);
     } else if (textType === 'bottom') {
-      setBottomText(e.target.value);
-      regenerateMemeUrl(selectedTemplate, topText, e.target.value);
+      setBottomText(value);
+      regenerateMemeUrl(selectedTemplate, topText, value);
     }
   };
 
@@ -76,14 +84,15 @@ function App() {
   // Map templates to options for the dropdown
   const options = [
     {
-      value: 'doge',
-      label: 'Doge Meme',
-      icon: 'https://api.memegen.link/images/doge.png',
+      value:
+        'https://api.memegen.link/images/noidea/highly_professional/meme_generator.jpg?watermark=MemeComplete.com&token=2ibib1bhzz941qk33lpj',
+      label: 'Choose meme',
+      icon: 'https://api.memegen.link/images/noidea/highly_professional/meme_generator.jpg?watermark=MemeComplete.com&token=2ibib1bhzz941qk33lpj',
     },
     ...templates.map((template) => ({
-      value: template.id.toLowerCase(), // Convert to lowercase for uniformity
+      value: template.id.toLowerCase(),
       label: template.name,
-      icon: template.blank, // Use 'blank' URL as the preview image
+      icon: template.blank,
     })),
   ];
 
@@ -103,19 +112,11 @@ function App() {
         <Select
           id="meme-template"
           options={options}
-          components={{ Option: IconOption }} // Use custom component for options
-          onChange={handleTemplateChange} // Update template selection
-          value={
-            selectedTemplate === 'doge'
-              ? {
-                  label: 'Doge Meme',
-                  value: 'doge',
-                  icon: 'https://api.memegen.link/images/doge.png',
-                }
-              : options.find((option) => option.value === selectedTemplate)
-          } // Show "Doge Meme" initially
+          components={{ Option: IconOption }}
+          onChange={handleTemplateChange}
+          value={options.find((option) => option.value === selectedTemplate)}
           placeholder="Choose Template"
-          isSearchable // Allow searching and typing in the dropdown
+          isSearchable
         />
       </div>
 
@@ -123,7 +124,7 @@ function App() {
       <input
         id="topText"
         value={topText}
-        onChange={(e) => handleTextChange(e, 'top')} // Update top text state and URL
+        onChange={(e) => handleTextChange(e, 'top')}
         placeholder="Enter top text"
       />
 
@@ -131,11 +132,10 @@ function App() {
       <input
         id="bottomText"
         value={bottomText}
-        onChange={(e) => handleTextChange(e, 'bottom')} // Update bottom text state and URL
+        onChange={(e) => handleTextChange(e, 'bottom')}
         placeholder="Enter bottom text"
       />
 
-      {/* Button to download the meme */}
       <button onClick={handleDownloadClick}>Download Meme</button>
     </div>
   );
