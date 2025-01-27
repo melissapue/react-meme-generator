@@ -161,9 +161,7 @@ function App() {
       />
 
       {/* Only render the button when the image has loaded */}
-      {isImageLoaded && (
-        <button onClick={handleDownloadClick}>Download Meme</button>
-      )}
+      {isImageLoaded && <button onClick={handleDownloadClick}>Download</button>}
     </div>
   );
 }
