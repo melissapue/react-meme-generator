@@ -41,36 +41,45 @@ function App() {
 
   const regenerateMemeUrl = useCallback(
     (template, top = topText, bottom = bottomText) => {
-      // Helper function to regenerate the meme URL
+      // Ensure top and bottom text are encoded correctly for URL use
       const formattedTopText = encodeURIComponent(top.trim()) || '_';
       const formattedBottomText = encodeURIComponent(bottom.trim()) || '_';
 
-      const isCustomTemplate = template && template.startsWith('http');
-      const newMemeUrl = template
-        ? isCustomTemplate
-          ? template // For custom templates, use the provided URL
-          : `https://api.memegen.link/images/${template}/${formattedTopText}/${formattedBottomText}.png`
-        : `https://api.memegen.link/images/noidea/highly_professional/${formattedTopText}/${formattedBottomText}.png`; // Default meme URL if no template
+      let newMemeUrl;
+
+      // If a template is selected and it's not a custom template
+      if (template && !template.startsWith('http')) {
+        newMemeUrl = `https://api.memegen.link/images/${template}/${formattedTopText}/${formattedBottomText}.png`;
+      }
+      // If no template is selected, use default meme
+      else if (!template && (top || bottom)) {
+        newMemeUrl = `https://api.memegen.link/images/noidea/highly_professional/${formattedTopText}/${formattedBottomText}.png`;
+      }
+      // Default meme if no text or template
+      else {
+        newMemeUrl =
+          'https://api.memegen.link/images/noidea/highly_professional/meme_generator.jpg?watermark=MemeComplete.com&token=2ibib1bhzz941qk33lpj';
+      }
 
       setMemeUrl(newMemeUrl);
     },
-    [topText, bottomText],
-  ); // Dependency on topText and bottomText
+    [topText, bottomText], // Dependencies for regeneration
+  );
 
   const handleTemplateChange = (selectedOption) => {
-    const newTemplate = selectedOption?.value || ''; // Set to empty if no template is selected
+    const newTemplate = selectedOption?.value || ''; // If no option, set to empty
     setSelectedTemplate(newTemplate);
-    regenerateMemeUrl(newTemplate || '', topText, bottomText); // Regenerate meme URL on template change
+    regenerateMemeUrl(newTemplate, topText, bottomText); // Update meme URL when template changes
   };
 
   const handleTextChange = (e, textType) => {
     const value = e.target.value;
     if (textType === 'top') {
       setTopText(value);
-      regenerateMemeUrl(selectedTemplate || '', value, bottomText);
+      regenerateMemeUrl(selectedTemplate, value, bottomText);
     } else if (textType === 'bottom') {
       setBottomText(value);
-      regenerateMemeUrl(selectedTemplate || '', topText, value);
+      regenerateMemeUrl(selectedTemplate, topText, value);
     }
   };
 
@@ -97,14 +106,12 @@ function App() {
     })),
   ];
 
-  // Update the meme URL when the selected template or text changes
+  // Automatically update meme when top/bottom text or template changes
   useEffect(() => {
     if (!selectedTemplate && (topText || bottomText)) {
-      // If there's no template but text is entered, default to the meme with text
-      regenerateMemeUrl('', topText, bottomText);
+      regenerateMemeUrl('', topText, bottomText); // Use default meme when no template is selected
     } else if (selectedTemplate) {
-      // If a template is selected, use that template with the text
-      regenerateMemeUrl(selectedTemplate, topText, bottomText);
+      regenerateMemeUrl(selectedTemplate, topText, bottomText); // Use selected template when available
     }
   }, [selectedTemplate, topText, bottomText, regenerateMemeUrl]);
 
